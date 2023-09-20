@@ -1,0 +1,47 @@
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+load("@//lib:pkgbuild.bzl", "pkgbuild_tars")
+
+# The resulting PKG should be installable by:
+#
+# sudo installer -pkg bazel-out/darwin-fastbuild/bin/macos-runner.pkg -target /
+
+# Test this payload with:
+#     bazel build //:actions-runner-tar && tar tzf bazel-bin/actions-runner-tar.tar
+# TODO: remove .dll files for smaller payload?
+pkg_tar(
+    name = "actions-runner-tar",
+    mode = "0755",
+    package_dir = "/usr/local/actions-runner",
+    #    srcs = [
+    #        "//scripts:check-installs.sh",
+    #        "//toolchains/bazelisk:lipo",
+    #        "//toolchains/git-town:lipo",
+    #        "//toolchains/ibazel:lipo",
+    #    ],
+    deps = select({
+        "@platforms//cpu:arm64": ["@actions_runner_tar_osx_arm64//file"],
+        "@platforms//cpu:x86_64": ["@actions_runner_tar_osx_x64//file"],
+        # no default: fast-fail
+    }),
+    #    symlinks = {
+    #        "usr/local/bin/bazel": "bazelisk",
+    #    },
+)
+
+pkgbuild_tars(
+    name = "macos-runner",
+    package_name = "macos-runner.pkg",
+    identifier = "com.chickenandpork.macos-runner",
+    #tars = ["@actions_runner_tar//file"],
+    tars = [":actions-runner-tar"],
+    version = "${VERSION}",  # indirectly drawn from workspace_status based on git tag vX.Y.Z
+)
+
+copy_file(
+    name = "dist_pkg",
+    src = ":macos-runner",
+    out = ".distrib/macos-runner.pkg",
+    allow_symlink = True,
+    is_executable = False,
+)
