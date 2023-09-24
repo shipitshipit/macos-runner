@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - run: echo "/usr/local/bin" >> $GITHUB_PATH  # uses local python3 as chicken-and-egg resolver, needs to be in path
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: bazelbuild/setup-bazelisk@v2
         # ...because now running locally, need to install the binary where the build user can see it
       - run: bazel build //...
