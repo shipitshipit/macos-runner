@@ -1,0 +1,29 @@
+name: Bazel build
+
+env:
+  HTTP_PROXY: http://10.0.0.9:3128/
+  HTTPS_PROXY: http://10.0.0.9:3128/
+
+# yamllint disable-line rule:truthy
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+  push:
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ self-macos-amd64 ]
+
+    steps:
+      - run: echo "/usr/local/bin" >> $GITHUB_PATH  # uses local python3 as chicken-and-egg resolver, needs to be in path
+      - uses: actions/checkout@v3
+      - uses: bazelbuild/setup-bazelisk@v2
+        # ...because now running locally, need to install the binary where the build user can see it
+      - run: bazel build //...
+      # - run: bazel test //... --test_output=errors --test_summary=detailed
