@@ -1,0 +1,26 @@
+name: Bazel build
+
+env:
+  HTTP_PROXY: http://10.0.0.9:3128/
+  HTTPS_PROXY: http://10.0.0.9:3128/
+
+# yamllint disable-line rule:truthy
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+  push:
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ self-macos-amd64 ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: bazel build //...
+      - run: bazel test //... --test_output=errors --test_summary=detailed
