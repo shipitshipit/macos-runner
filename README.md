@@ -11,3 +11,5 @@ Build config for self-hosted GitHub runners on MacOS hardware
  - `sudo chown root:wheel  /Users/{build user}/Library/LaunchAgents/actions.runner.shipitshipit.*`
  - `sudo launchctl load -w  /Users/gar/Library/LaunchAgents/actions.runner.shipitshipit.*`
 
+You'll need to ensure there's a `python3` -- https://www.python.org/downloads/macos/ if you don't have on that system
+
