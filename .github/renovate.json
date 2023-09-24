@@ -20,5 +20,8 @@
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver-coerced{{/if}}"
     }
+  ],
+  "reviewers": [
+    "@chickenandpork"
   ]
 }
