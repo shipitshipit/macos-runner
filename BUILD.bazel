@@ -9,6 +9,9 @@ load("@//lib:pkgbuild.bzl", "pkgbuild_tars")
 # Test this payload with:
 #     bazel build //:actions-runner-tar && tar tzf bazel-bin/actions-runner-tar.tar
 # TODO: remove .dll files for smaller payload?
+bok bokbok
+
+
 pkg_tar(
     name = "actions-runner-tar",
     mode = "0755",
