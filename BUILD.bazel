@@ -9,27 +9,15 @@ load("@//lib:pkgbuild.bzl", "pkgbuild_tars")
 # Test this payload with:
 #     bazel build //:actions-runner-tar && tar tzf bazel-bin/actions-runner-tar.tar
 # TODO: remove .dll files for smaller payload?
-bok bokbok
-
-
 pkg_tar(
     name = "actions-runner-tar",
     mode = "0755",
     package_dir = "/usr/local/actions-runner",
-    #    srcs = [
-    #        "//scripts:check-installs.sh",
-    #        "//toolchains/bazelisk:lipo",
-    #        "//toolchains/git-town:lipo",
-    #        "//toolchains/ibazel:lipo",
-    #    ],
     deps = select({
         "@platforms//cpu:arm64": ["@actions_runner_tar_osx_arm64//file"],
         "@platforms//cpu:x86_64": ["@actions_runner_tar_osx_x64//file"],
         # no default: fast-fail
     }),
-    #    symlinks = {
-    #        "usr/local/bin/bazel": "bazelisk",
-    #    },
 )
 
 pkgbuild_tars(
