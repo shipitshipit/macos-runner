@@ -1,5 +1,12 @@
 # macos-runner
-Build config for self-hosted GitHub runners on MacOS hardware
+Installable Mac PKG to facilitate self-hosted GitHub runners on MacOS hardware
+
+This is low-quality project that seeks to package some of the complexity of
+quickly activating GitHub Action Runners on standard MacOS systems.  Releases
+should offer Arch-specific PKGs rather than fat/multi-arch, and still require a
+bit of manual work as shown below (almost rising to the level of Ansible, or
+pre-install/post-install, or similar automation but still fairly high on
+entropy to lock-down as a script).
 
 # Current Usage
  - `bazel build //...`
