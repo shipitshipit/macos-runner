@@ -23,9 +23,9 @@
       "automerge": true,
       "enabled": false,
       "matchManagers": [
-        "action",
         "bazel",
-        "bazel_dep"
+        "bazel-module",
+        "github-actions"
       ],
       "matchUpdateTypes": [
         "patch",
