@@ -48,8 +48,6 @@ jobs:
         run: |
           if [[ -n "$(git diff "$LOCKFILE")" ]]
           then
-              echo "Nothing to commit"
-          else
               git config --global user.name "Allan Clark"
               git config --global user.email "chickenandpork@users.noreply.github.com"
               git checkout -b "${BRANCH_NAME}"
@@ -59,4 +57,6 @@ jobs:
               " "$LOCKFILE"
               git push origin "${BRANCH_NAME}" -f
               gh pr create --fill --label "dependencies" >> "$GITHUB_STEP_SUMMARY"
+          else
+              echo "Nothing to commit"
           fi
