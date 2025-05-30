@@ -11,15 +11,24 @@ load("@//lib:pkgbuild.bzl", "pkgbuild_tars")
 # TODO: remove .dll files for smaller payload?
 
 ARCH_DEP = {
-    "amd64": { "d": "@actions_runner_tar_osx_x64//file", },
-    "arm64": { "d": "@actions_runner_tar_osx_arm64//file", },
+    "amd64": { "d": "@@rules_multitool++multitool+multitool.actions_runner.macos_x86_64//tools/actions_runner:macos_x86_64_executable" },
+    "arm64": { "d": "@@rules_multitool++multitool+multitool.actions_runner.macos_arm64//tools/actions_runner:macos_arm64_executable" },
 }
+
+# Copy the file to remask its non-tarball extension
+[copy_file(
+    name = "copy-{}".format(k),
+    src = v["d"],
+    out = "copy-{}.tar.gz".format(k),
+    allow_symlink = True,
+    is_executable = False,
+) for k,v in ARCH_DEP.items() ]
 
 [pkg_tar(
     name = "actions-runner-{}".format(k),
     mode = "0755",
     package_dir = "/usr/local/actions-runner",
-    deps = [ v["d"] ],
+    deps = [ "copy-{}".format(k) ],
 ) for k,v in ARCH_DEP.items() ]
 
 [pkgbuild_tars(

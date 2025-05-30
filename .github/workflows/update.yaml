@@ -1,0 +1,62 @@
+---
+name: Multitool Update
+# yamllint disable-line rule:truthy
+on:
+  schedule:
+    - cron: "17 00 * * *"  # 00:17UTC, ~17:17 PST
+  workflow_dispatch:
+
+
+jobs:
+  update:
+    name: multitool update
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    # disable running on anything but master
+    if: ${{ github.ref == 'refs/heads/master' }}
+    env:
+      LOCKFILE: ./multitool.lock.json
+
+    steps:
+      -
+        name: Date-Based Cache key
+        # get a key showing the current week (ISO: yyyyWww) allowing older caches to age-out/autoprune
+        id: week
+        run: echo "::set-output name=iso::$(date +'bazel-%YW%U')"
+      -
+        uses: bazel-contrib/setup-bazel@0.14.0
+        with:
+          # Cache bazel downloads via bazelisk
+          bazelisk-cache: true
+          # Store build cache per week
+          disk-cache: ${{ steps.week.outputs.iso }}
+          # Share repository cache between workflows.
+          repository-cache: true
+      -
+        name: Clone Repo
+        uses: actions/checkout@v4
+      -
+        name: Update
+        id: update
+        run: bazel run @multitool//tools/multitool:cwd -- --lockfile "$LOCKFILE" update
+      - name: Commit
+        id: commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GHPAT_CNP_CNB }}
+          BRANCH_NAME: "chore/update-multitool-lockfile"
+        run: |
+          if [[ -n "$(git diff "$LOCKFILE")" ]]
+          then
+              echo "Nothing to commit"
+          else
+              git config --global user.name "Allan Clark"
+              git config --global user.email "chickenandpork@users.noreply.github.com"
+              git checkout -b "${BRANCH_NAME}"
+              git commit -m "Update Multitool Versions
+              
+              Updated with [update-multitool](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}) by *${GITHUB_ACTOR}*
+              " "$LOCKFILE"
+              git push origin "${BRANCH_NAME}" -f
+              gh pr create --fill --label "dependencies" >> "$GITHUB_STEP_SUMMARY"
+          fi

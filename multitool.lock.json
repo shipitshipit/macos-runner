@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/theoremlp/rules_multitool/main/lockfile.schema.json",
+  "actions_runner": {
+    "binaries": [
+      {
+        "kind": "file",
+        "url": "https://github.com/actions/runner/releases/download/v2.308.0/actions-runner-osx-arm64-2.308.0.tar.gz",
+        "sha256": "a8b2c25868e4296cbd203342754223dd2cc17f91585592c99ccd85b587d05310",
+        "os": "macos",
+        "cpu": "arm64"
+      },
+      {
+        "kind": "file",
+        "url": "https://github.com/actions/runner/releases/download/v2.308.0/actions-runner-osx-x64-2.308.0.tar.gz",
+        "sha256": "b90f41c2f3af19c4feea5e70d32c6634e800663af95cdd892a322b304d5ca2de",
+        "os": "macos",
+        "cpu": "x86_64"
+      }
+    ]
+  },
+  "multitool": {
+    "binaries": [
+      {
+        "kind": "archive",
+        "url": "https://github.com/theoremlp/multitool/releases/download/v0.9.0/multitool-aarch64-apple-darwin.tar.xz",
+        "file": "multitool-aarch64-apple-darwin/multitool",
+        "sha256": "8f5e0cd033b0fcc128c762f8d527110433523da378619cecf40e91c1df5c0686",
+        "os": "macos",
+        "cpu": "arm64"
+      },
+      {
+        "kind": "archive",
+        "url": "https://github.com/theoremlp/multitool/releases/download/v0.9.0/multitool-x86_64-apple-darwin.tar.xz",
+        "file": "multitool-x86_64-apple-darwin/multitool",
+        "sha256": "abde3bbbd49a09d33048e1f55cc9a8aa5dd61a13493a0b1bd5ffc2c56e5bf837",
+        "os": "macos",
+        "cpu": "x86_64"
+      }
+    ]
+  }
+}
