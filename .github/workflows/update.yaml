@@ -43,7 +43,8 @@ jobs:
       - name: Commit
         id: commit
         env:
-          GITHUB_TOKEN: ${{ secrets.GHPAT_CNP_CNB }}
+          # GH_TOKEN for GH command
+          GH_TOKEN: ${{ secrets.GHPAT_CNP_CNB }}
           BRANCH_NAME: "chore/update-multitool-lockfile"
         run: |
           if [[ -n "$(git diff "$LOCKFILE")" ]]
