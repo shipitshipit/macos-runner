@@ -13,7 +13,7 @@
 # It is anticipated that non "-root" packaging will be done, so I've named this one
 # "pkgbuild_tars.sh" to allow the non-tars-based packaging to be easily identified as well.
 
-TMPDIR=`mktemp -d -t pkgbuild` || { echo "$0: Cannot create working (root) directory; aborting"; exit 1; }
+TMPDIR=`mktemp -d -t pkgbuild.XXXXXXXXXX` || { echo "$0: Cannot create working (root) directory; aborting"; exit 1; }
 
 eval $(cat /dev/null {STATUS_FILE_STABLE} {STATUS_FILE_VOLATILE} | grep ^VERSION | sed -e 's/ v/=/g')
 

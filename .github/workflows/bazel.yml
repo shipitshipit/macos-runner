@@ -1,8 +1,9 @@
+---
 name: Bazel build
 
-env:
-  HTTP_PROXY: http://10.0.0.9:3128/
-  HTTPS_PROXY: http://10.0.0.9:3128/
+# env:
+#   HTTP_PROXY: http://10.0.0.9:3128/
+#   HTTPS_PROXY: http://10.0.0.9:3128/
 
 # yamllint disable-line rule:truthy
 on:
@@ -18,12 +19,30 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ self-macos-amd64 ]
+        # os: [ self-macos-amd64 ]
+        os: [macos-latest]
 
     steps:
-      - run: echo "/usr/local/bin" >> $GITHUB_PATH  # uses local python3 as chicken-and-egg resolver, needs to be in path
-      - uses: actions/checkout@v3
-      - uses: bazelbuild/setup-bazelisk@v2
-        # ...because now running locally, need to install the binary where the build user can see it
-      - run: bazel build //...
+      -
+        name: Date-Based Cache key
+        # get a key showing the current week (ISO: yyyyWww) allowing older caches to age-out/autoprune
+        id: week
+        run: echo "::set-output name=iso::$(date +'bazel-%YW%U')"
+      -
+        uses: bazel-contrib/setup-bazel@0.14.0
+        with:
+          # Cache bazel downloads via bazelisk
+          bazelisk-cache: true
+          # Store build cache per week
+          disk-cache: ${{ steps.week.outputs.iso }}
+          # Share repository cache between workflows.
+          repository-cache: true
+      -
+        name: Clone Repo
+        uses: actions/checkout@v4
+      # - run: echo "/usr/local/bin" >> $GITHUB_PATH  # uses local python3 as chicken-and-egg resolver, needs to be in path
+      -
+        run: bazel build //...
       # - run: bazel test //... --test_output=errors --test_summary=detailed
+      -
+        run: bazel shutdown
