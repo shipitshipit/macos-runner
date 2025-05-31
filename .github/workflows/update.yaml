@@ -12,7 +12,9 @@ jobs:
     name: multitool update
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      #contents: read
+      contents: write
+      pull-requests: write
     # disable running on anything but master
     if: ${{ github.ref == 'refs/heads/master' }}
     env:
@@ -44,7 +46,9 @@ jobs:
         id: commit
         env:
           # GH_TOKEN for GH command
-          GH_TOKEN: ${{ secrets.GHPAT_CNP_CNB }}
+          #GH_TOKEN: ${{ secrets.GHPAT_CNP_CNB }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH_NAME: "chore/update-multitool-lockfile"
         run: |
           if [[ -n "$(git diff "$LOCKFILE")" ]]
@@ -56,7 +60,9 @@ jobs:
               
               Updated with [update-multitool](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}) by *${GITHUB_ACTOR}*
               " "$LOCKFILE"
+              echo "pushing"
               git push origin "${BRANCH_NAME}" -f
+              echo "pr create"
               gh pr create --fill --label "dependencies" >> "$GITHUB_STEP_SUMMARY"
           else
               echo "Nothing to commit"
