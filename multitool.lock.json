@@ -4,15 +4,15 @@
     "binaries": [
       {
         "kind": "file",
-        "url": "https://github.com/actions/runner/releases/download/v2.327.0/actions-runner-osx-arm64-2.327.0.tar.gz",
-        "sha256": "dd0753890663023646d7c9739f9fd2b4b85dadbdc023bfacc688dda8fa7b16f5",
+        "url": "https://github.com/actions/runner/releases/download/v2.327.1/actions-runner-osx-arm64-2.327.1.tar.gz",
+        "sha256": "807f875f4a357a9c919b484329c072e885ef2c041a18d3107cf1a1e5932eecc0",
         "os": "macos",
         "cpu": "arm64"
       },
       {
         "kind": "file",
-        "url": "https://github.com/actions/runner/releases/download/v2.327.0/actions-runner-osx-x64-2.327.0.tar.gz",
-        "sha256": "2e9f16999a83f39969186e76abb2ba726c04e11dc98986de7d9e494fe0236d0f",
+        "url": "https://github.com/actions/runner/releases/download/v2.327.1/actions-runner-osx-x64-2.327.1.tar.gz",
+        "sha256": "a0cb80fb6baacf5c669ccd5c2f64429033a7b4dac1e020b4231a4fc5ff396b76",
         "os": "macos",
         "cpu": "x86_64"
       }
