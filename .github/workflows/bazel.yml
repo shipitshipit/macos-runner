@@ -39,7 +39,7 @@ jobs:
           repository-cache: true
       -
         name: Clone Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       # - run: echo "/usr/local/bin" >> $GITHUB_PATH  # uses local python3 as chicken-and-egg resolver, needs to be in path
       -
         run: bazel build //...
